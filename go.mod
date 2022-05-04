@@ -1,4 +1,4 @@
-module ygin
+module ygins
 
 go 1.16
 

@@ -9,8 +9,8 @@ import (
 	"runtime"
 	"strings"
 	"sync"
-	"ygin/config"
-	"ygin/logger"
+	"ygins/config"
+	"ygins/logger"
 )
 
 var (
