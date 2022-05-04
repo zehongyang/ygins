@@ -1,4 +1,4 @@
-module ygins
+module github.com/zehongyang/ygins
 
 go 1.16
 

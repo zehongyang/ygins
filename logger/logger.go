@@ -1,9 +1,9 @@
 package logger
 
 import (
+	"github.com/zehongyang/ygins/config"
 	"go.uber.org/zap"
 	"log"
-	"ygins/config"
 )
 
 var (
