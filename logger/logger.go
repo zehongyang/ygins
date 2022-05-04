@@ -3,7 +3,7 @@ package logger
 import (
 	"go.uber.org/zap"
 	"log"
-	"ygin/config"
+	"ygins/config"
 )
 
 var (
