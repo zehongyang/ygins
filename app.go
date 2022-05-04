@@ -2,6 +2,8 @@ package ygins
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/zehongyang/ygins/config"
+	"github.com/zehongyang/ygins/logger"
 	"go.uber.org/zap"
 	"net/url"
 	"path/filepath"
@@ -9,8 +11,6 @@ import (
 	"runtime"
 	"strings"
 	"sync"
-	"ygins/config"
-	"ygins/logger"
 )
 
 var (
