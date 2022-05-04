@@ -1,0 +1,12 @@
+server:
+  - name: "api"
+    addr: ":8080"
+    middlewares: []
+    routergroups:
+      - group: "/admin"
+        middlewares: []
+        routers:
+          - path: "/abc"
+            methods: ["POST"]
+            handlers: [""]
+
