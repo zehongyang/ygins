@@ -1,4 +1,4 @@
-package ygin
+package ygins
 
 import (
 	"github.com/gin-gonic/gin"
@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	ygin = AppYGin{handles: make(map[string]Handler)}
+	yGinMp = AppYGin{handles: make(map[string]Handler)}
 	once sync.Once
 	server Servers
 	exitChan chan bool
@@ -56,8 +56,8 @@ func Register(handlers ...Handler)  {
 		fn := runtime.FuncForPC(rv.Pointer())
 		name := filepath.ToSlash(fn.Name())
 		nameSplits := strings.Split(name, "/")
-		if _,ok := ygin.handles[nameSplits[len(nameSplits)-1]];!ok{
-			ygin.handles[nameSplits[len(nameSplits)-1]] = handler
+		if _,ok := yGinMp.handles[nameSplits[len(nameSplits)-1]];!ok{
+			yGinMp.handles[nameSplits[len(nameSplits)-1]] = handler
 		}else{
 			logger.Warn("Register handler",zap.Any("hanler exist",nameSplits[len(nameSplits)-1]))
 		}
@@ -65,7 +65,7 @@ func Register(handlers ...Handler)  {
 }
 
 func Get(name string,v ...url.Values) gin.HandlerFunc {
-	h,ok := ygin.handles[name]
+	h,ok := yGinMp.handles[name]
 	if !ok {
 		logger.Warn("Get Handler",zap.Any("no handler named",name))
 		return nil

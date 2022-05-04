@@ -1,4 +1,4 @@
-package ygin
+package ygins
 
 
 //type Tt struct {
