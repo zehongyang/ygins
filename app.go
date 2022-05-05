@@ -1,6 +1,7 @@
 package ygins
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/zehongyang/ygins/config"
 	"github.com/zehongyang/ygins/logger"
@@ -9,6 +10,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"strconv"
 	"strings"
 	"sync"
 )
@@ -18,6 +20,8 @@ var (
 	once sync.Once
 	server Servers
 	exitChan chan bool
+	PtrErr = errors.New("is not ptr kind")
+	StructErr = errors.New("is not struct kind")
 )
 
 type Handler func(values ...url.Values)gin.HandlerFunc
@@ -147,4 +151,50 @@ func distinctStringSlice(ss []string) []string {
 		rs = append(rs,s)
 	}
 	return rs
+}
+
+func LoadTagStruct(o interface{},v url.Values,tag ...string) error {
+	rv := reflect.ValueOf(o)
+	if rv.Kind() != reflect.Ptr {
+		return PtrErr
+	}
+	elem := rv.Elem()
+	if elem.Kind() != reflect.Struct {
+		return StructErr
+	}
+	rt := elem.Type()
+	num := rt.NumField()
+	var tg string
+	if len(tag) > 0 {
+		tg = tag[0]
+	}
+	for i := 0; i < num; i++ {
+		ft := rt.Field(i)
+		sv := v.Get(ft.Name)
+		if len(tg) > 0 && len(sv) < 1 {
+			sv = v.Get(ft.Tag.Get(tg))
+		}
+		field := elem.Field(i)
+		if field.CanSet() && len(sv) > 0 {
+			switch field.Kind() {
+			case reflect.Bool:
+				field.SetBool(sv == "true")
+			case reflect.Int,reflect.Int8,reflect.Int16,reflect.Int32,reflect.Int64:
+				parseInt, err := strconv.ParseInt(sv, 10, 64)
+				if err != nil {
+					return err
+				}
+				field.SetInt(parseInt)
+			case reflect.Uint,reflect.Uint8,reflect.Uint16,reflect.Uint32,reflect.Uint64:
+				parseUint, err := strconv.ParseUint(sv, 10, 64)
+				if err != nil {
+					return err
+				}
+				field.SetUint(parseUint)
+			case reflect.String:
+				field.SetString(sv)
+			}
+		}
+	}
+	return nil
 }
