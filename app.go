@@ -116,7 +116,19 @@ func Run()  {
 						for _, method := range router.Methods {
 							var hs []gin.HandlerFunc
 							for _, handler := range router.Handlers {
-								h := Get(handler)
+								var v url.Values
+								idx := strings.Index(handler,"?")
+								if  idx != -1 {
+									tv, err := url.Parse(handler)
+									if err != nil {
+										logger.Fatal("Run url parse",zap.Error(err))
+									}
+									if tv != nil {
+										v = tv.Query()
+									}
+									handler = handler[:idx]
+								}
+								h := Get(handler,v)
 								if h != nil {
 									hs = append(hs,h)
 								}

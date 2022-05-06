@@ -1,7 +1,9 @@
 package ygins
 
 import (
+	"github.com/zehongyang/ygins/config"
 	"net/url"
+	"strings"
 	"testing"
 )
 
@@ -43,4 +45,30 @@ func TestReflect(t *testing.T)  {
 	err := LoadTagStruct(&o, v)
 	t.Log(err)
 	t.Log(o)
+}
+
+func TestRep(t *testing.T)  {
+	var str = "${ADDR}${PORT}"
+	ss := strings.Split(str, "${")
+	var sb strings.Builder
+	for _, s := range ss {
+		idx := strings.Index(s, "}")
+		t.Log(s,idx)
+		if idx > 0 {
+			t.Log(s[:idx])
+			if idx != len(s) - 1 {
+				sb.WriteString(s[:idx])
+				sb.WriteString(s[idx+1:])
+			}else{
+				sb.WriteString(strings.TrimRight(s,"}"))
+			}
+		}else{
+			sb.WriteString(s)
+		}
+	}
+	t.Log(sb.String())
+}
+
+func TestEnv(t *testing.T)  {
+	config.IsDebug()
 }

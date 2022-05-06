@@ -7,5 +7,5 @@ server:
         middlewares: []
         routers:
           - path: "/abc"
-            methods: ["POST"]
-            handlers: [""]
+            methods: ["GET"]
+            handlers: ["main.Login?Times=10"]

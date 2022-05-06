@@ -60,6 +60,34 @@ func loadFiles() {
 		}
 		gData = append(gData,data...)
 	}
+	replaceEnvVariable()
+}
+
+func replaceEnvVariable()  {
+	str := string(gData)
+	if len(str) < 1 {
+		return
+	}
+	ss := strings.Split(str, "${")
+	var sb strings.Builder
+	for _, s := range ss {
+		idx := strings.Index(s, "}")
+		if idx > 0 {
+			var k = s[:idx]
+			envK := os.Getenv(k)
+			if len(envK) > 0 {
+				sb.WriteString(envK)
+			}else{
+				sb.WriteString(k)
+			}
+			if idx != len(s) - 1 {
+				sb.WriteString(s[idx+1:])
+			}
+		}else{
+			sb.WriteString(s)
+		}
+	}
+	gData = []byte(sb.String())
 }
 
 func Load(o interface{}) error {

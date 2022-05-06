@@ -1,0 +1,20 @@
+log:
+  level: "DEBUG"
+  development: true
+  disableCaller: false
+  disableStacktrace: true
+  encoding: "console"
+  encoderConfig:
+    messageKey: "msg"
+    levelKey: "level"
+    timeKey: "ts"
+    nameKey: "name"
+    callerKey: "caller"
+    functionKey: "func"
+    stacktraceKey: "stacktrace"
+    LineEnding: "\n"
+    levelEncoder: "capital"
+    timeEncoder: "iso8601"
+    callerEncoder: "full"
+  outputPaths: ["stderr"]
+  ErrorOutputPaths: ["stderr"]
